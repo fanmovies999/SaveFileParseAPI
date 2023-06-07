@@ -12,4 +12,7 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /App
 COPY --from=build-env /App/out .
+# don't forget dll
+COPY --from=build-env ./Klukule.HogwartsLegacy.SavefileParser/oo2core_9_win64.dll .
+
 ENTRYPOINT ["dotnet", "Klukule.HogwartsLegacy.SavefileParser.dll"]
