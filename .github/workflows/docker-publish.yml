@@ -14,9 +14,6 @@ on:
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
-
 
 jobs:
   build:
@@ -70,7 +67,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4.5.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}          
 
