@@ -37,7 +37,7 @@ jobs:
             core.exportVariable('repo_path', context.repo.repo)
             console.log(context.repo.repo)
             console.log(context.repo.owner)
-            console.log(repo_path)
+            console.log(env.repo_path)
               
       - name: Checkout repository
         uses: actions/checkout@v3
