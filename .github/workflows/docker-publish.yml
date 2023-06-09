@@ -30,6 +30,14 @@ jobs:
       id-token: write
 
     steps:
+      - name: Variables
+        uses: actions/github-scripts@6
+        with:
+          script: |
+            const repo_path = github.repository.substring(github.repository_owner.length+1);
+            core.exportVariable('repo_path', repo_path)
+        
+       
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -78,7 +86,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platform: windows/amd64
-          image: ${{ env.IMAGE_NAME }}
+          image: ${{ env.repo_path }}
           registry:  ${{ env.REGISTRY }}
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
