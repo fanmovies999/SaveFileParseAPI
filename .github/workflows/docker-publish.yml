@@ -31,7 +31,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const repo_path = context.repo.repo.lower
+            const repo_path = context.repo.repo.toLowerCase()
             core.exportVariable('repo_path', repo_path)
             console.log("repo_path: "+repo_path)
               
