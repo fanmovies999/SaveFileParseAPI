@@ -78,13 +78,13 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6.2
         with:
           pushImage: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platform: windows/amd64
           image: ${{ github.repository }}
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          registry: ${{ env.REGISTRY }} 
+          registry: ${{ env.REGISTRY }}
+          addLatest: true
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
