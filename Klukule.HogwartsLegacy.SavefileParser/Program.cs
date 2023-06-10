@@ -2,6 +2,8 @@
 using System.Text;
 using UnrealEngine.Gvas;
 using UnrealEngine.Gvas.FProperties;
+using CUE4Parse.Compression;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -39,18 +41,25 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
     if (BitConverter.ToUInt64(dbBytes[0..8]) == PACKAGE_FILE_TAG)
     {
         // Decompress the archive
-        var Ar = new FArchiveLoadCompressedProxy("RawDatabaseImage", dbBytes, "Oodle");
+        byte[] uncompressed;
+        int uncompressedOffset;
+        int uncompressedSize;
+        Oodle.Decompress(dbBytes, 0, dbBytes.Lenght, uncompressed, uncompressedOffset, uncompressedSize);
+        
+        Console.WriteLine("uncompressedOffset: "+uncompressedOffset);
+        Console.WriteLine("uncompressedSize: "+uncompressedSize);
+        
+        dbBytes = uncompressed;
+        //var Ar = new FArchiveLoadCompressedProxy("RawDatabaseImage", dbBytes, "Oodle");
         // dbBytes = Ar.ReadArray<byte>();
-        int res = Ar.Read(dbBytes, 0, dbBytes.Length);
-        Console.WriteLine("res: "+res);
             
         // The bytes store whole FString property including length
         // Extract the length and skip it in returning bytes
-        var size = BitConverter.ToInt32(dbBytes);
-        dbBytes = dbBytes[4..];
+        //var size = BitConverter.ToInt32(dbBytes);
+        //dbBytes = dbBytes[4..];
 
         // Validate the size since we have that information
-        if (size != dbBytes.Length) return Results.UnprocessableEntity("Corrupted file");
+        //if (size != dbBytes.Length) return Results.UnprocessableEntity("Corrupted file");
     }
 
     // Return uncompressed
