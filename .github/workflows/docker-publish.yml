@@ -31,7 +31,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            core.exportVariable('repo_path', context.repo.repo)
+            const repo_path = String(context.repo.repo).substring(github.repository_owner.length())
+            core.exportVariable('repo_path', repo_path)
               
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -80,7 +81,7 @@ jobs:
           pushImage: ${{ github.event_name != 'pull_request' }}
           labels: ${{ steps.meta.outputs.labels }}
           platform: windows/amd64
-          image: ${{ github.repository }}
+          image: ${{ env.repo_path }}
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ${{ env.REGISTRY }}
