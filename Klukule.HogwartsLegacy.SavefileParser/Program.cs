@@ -42,7 +42,7 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
         var Ar = new FArchiveLoadCompressedProxy("RawDatabaseImage", dbBytes, "Oodle");
         // dbBytes = Ar.ReadArray<byte>();
         int res = Ar.Read(dbBytes, 0, dbBytes.Length);
-        console.log("res: "+res);
+        Console.WriteLine("res: "+res);
             
         // The bytes store whole FString property including length
         // Extract the length and skip it in returning bytes
