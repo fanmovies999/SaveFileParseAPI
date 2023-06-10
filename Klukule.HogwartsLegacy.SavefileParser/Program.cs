@@ -35,7 +35,7 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
     var dbBytes = (byte[])db.AsPrimitive();
 
     Console.WriteLine("Lenght: "+dbBytes.Length);
-    Console.WriteLine("Begining: "+ dbBytes[0..50]);
+    Console.WriteLine("Begining: "+ Console.WriteLine(Encoding.Default.GetString(dbBytes[0..50])));
     
     // Check if the save file is in new compressed format - if so, decompress it
     const ulong PACKAGE_FILE_TAG = 0x9E2A83C1;
@@ -43,6 +43,7 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
     {
         // Decompress the archive
         var Ar = new FArchiveLoadCompressedProxy("RawDatabaseImage", dbBytes, "Oodle");
+        Console.WriteLine("Ar: "+Ar.Length);
         dbBytes = Ar.ReadArray<byte>();
 
         // The bytes store whole FString property including length
