@@ -34,6 +34,8 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
     var db = saveData.Root.Fields["RawDatabaseImage"] as FArrayProperty;
     var dbBytes = (byte[])db.AsPrimitive();
 
+    Console.WriteLine("Lenght: "+dbBytes.length);
+    
     // Check if the save file is in new compressed format - if so, decompress it
     const ulong PACKAGE_FILE_TAG = 0x9E2A83C1;
     if (BitConverter.ToUInt64(dbBytes[0..8]) == PACKAGE_FILE_TAG)
