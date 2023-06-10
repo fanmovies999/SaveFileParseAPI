@@ -31,11 +31,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const repo_path = String(context.repo.repo).substring(context.repo.owner.length)
+            const repo_path = context.repo.repo
             core.exportVariable('repo_path', repo_path)
-            console.log("repo: "+context.repo.repo)
-            console.log("owner: "+context.repo.owner)
-            console.log("length: "+context.repo.owner.length)
             console.log("repo_path: "+repo_path)
               
       - name: Checkout repository
