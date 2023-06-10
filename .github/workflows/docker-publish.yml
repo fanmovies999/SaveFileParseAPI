@@ -80,7 +80,6 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6.2
         with:
           pushImage: ${{ github.event_name != 'pull_request' }}
-          labels: ${{ steps.meta.outputs.labels }}
           platform: windows/amd64
           image: ${{ env.repo_path }}
           username: ${{ github.repository_owner }}
