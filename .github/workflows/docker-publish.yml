@@ -33,6 +33,10 @@ jobs:
           script: |
             const repo_path = String(context.repo.repo).substring(context.repo.owner.length)
             core.exportVariable('repo_path', repo_path)
+            console.log("repo: "+context.repo.repo)
+            console.log("owner: "+context.repo.owner)
+            console.log("length: "+context.repo.owner.length)
+            console.log("repo_path: "+repo_path)
               
       - name: Checkout repository
         uses: actions/checkout@v3
