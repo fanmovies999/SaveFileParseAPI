@@ -15,4 +15,6 @@ COPY --from=build-env /App/out .
 # don't forget dll
 COPY --from=build-env /App/Klukule.HogwartsLegacy.SavefileParser/oo2core_9_win64.dll .
 
+EXPOSE 80/tcp
+
 ENTRYPOINT ["dotnet", "Klukule.HogwartsLegacy.SavefileParser.dll"]
