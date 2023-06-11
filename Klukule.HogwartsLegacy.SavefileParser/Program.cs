@@ -41,7 +41,7 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
     if (BitConverter.ToUInt64(dbBytes[0..8]) == PACKAGE_FILE_TAG)
     {
         // load dll
-        if(!Oddle.LoadOodleDll()) return Results.UnprocessableEntity("DLL not loaded.");
+        if(!Oodle.LoadOodleDll()) return Results.UnprocessableEntity("DLL not loaded.");
         
         // Decompress the archive
         byte[] uncompressed = new byte[(dbBytes.Length + 274 * ((dbBytes.Length + 0x3FFFF) / 0x40000))];
