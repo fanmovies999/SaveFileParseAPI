@@ -1,5 +1,6 @@
 ﻿using CUE4Parse.UE4.Readers;
 using System.Text;
+using System.IO;
 using UnrealEngine.Gvas;
 using UnrealEngine.Gvas.FProperties;
 using CUE4Parse.Compression;
@@ -42,7 +43,7 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
     {
         // load dll
         if(!Oodle.LoadOodleDll()) return Results.UnprocessableEntity("DLL not loaded.");
-        Console.WriteLine("dll: "+FileInfo(OODLE_DLL_NAME).Length + ", " + FileInfo(OODLE_DLL_NAME).FullPath);
+        Console.WriteLine("dll: "+FileInfo(Oodle.OODLE_DLL_NAME).Length + ", " + FileInfo(Oodle.OODLE_DLL_NAME).FullPath);
 
         // Decompress the archive
         byte[] uncompressed = new byte[(dbBytes.Length + 274 * ((dbBytes.Length + 0x3FFFF) / 0x40000))];
