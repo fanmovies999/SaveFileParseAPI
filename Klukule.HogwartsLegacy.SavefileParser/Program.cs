@@ -41,7 +41,7 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
     if (BitConverter.ToUInt64(dbBytes[0..8]) == PACKAGE_FILE_TAG)
     {
         // Decompress the archive
-        byte[] uncompressed;
+        byte[] uncompressed = new byte[(dbBytes.Length + 274 * ((dbBytes.Length + 0x3FFFF) / 0x40000))];
         int uncompressedOffset = 0;
         int uncompressedSize = 0;
         Oodle.Decompress(dbBytes, 0, dbBytes.Length, uncompressed, uncompressedOffset, uncompressedSize);
