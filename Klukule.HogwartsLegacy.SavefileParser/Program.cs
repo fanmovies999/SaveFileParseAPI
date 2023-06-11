@@ -43,7 +43,8 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
     {
         // load dll
         if(!Oodle.LoadOodleDll()) return Results.UnprocessableEntity("DLL not loaded.");
-        Console.WriteLine("dll: "+FileInfo(Oodle.OODLE_DLL_NAME).Length + ", " + FileInfo(Oodle.OODLE_DLL_NAME).FullPath);
+        var f = FileInfo(Oodle.OODLE_DLL_NAME);
+        Console.WriteLine("dll: "+f.Length);
 
         // Decompress the archive
         byte[] uncompressed = new byte[(dbBytes.Length + 274 * ((dbBytes.Length + 0x3FFFF) / 0x40000))];
