@@ -1,10 +1,7 @@
 ﻿using CUE4Parse.UE4.Readers;
 using System.Text;
-using System.IO;
 using UnrealEngine.Gvas;
 using UnrealEngine.Gvas.FProperties;
-using CUE4Parse.Compression;
-
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -41,31 +38,17 @@ app.MapPost("/api/v1/ParseSaveFile", async (Stream body) =>
     const ulong PACKAGE_FILE_TAG = 0x9E2A83C1;
     if (BitConverter.ToUInt64(dbBytes[0..8]) == PACKAGE_FILE_TAG)
     {
-        // load dll
-        if(!Oodle.LoadOodleDll()) return Results.UnprocessableEntity("DLL not loaded.");
-        var f = new FileInfo(Oodle.OODLE_DLL_NAME);
-        Console.WriteLine("dll: "+f.Length);
-
         // Decompress the archive
-        byte[] uncompressed = new byte[(dbBytes.Length + 274 * ((dbBytes.Length + 0x3FFFF) / 0x40000))];
-        int uncompressedOffset = 0;
-        int uncompressedSize = 0;
-        Oodle.Decompress(dbBytes, 0, dbBytes.Length, uncompressed, uncompressedOffset, uncompressedSize);
-        
-        Console.WriteLine("uncompressedOffset: "+uncompressedOffset);
-        Console.WriteLine("uncompressedSize: "+uncompressedSize);
-        
-        dbBytes = uncompressed;
-        //var Ar = new FArchiveLoadCompressedProxy("RawDatabaseImage", dbBytes, "Oodle");
-        // dbBytes = Ar.ReadArray<byte>();
-            
+        var Ar = new FArchiveLoadCompressedProxy("RawDatabaseImage", dbBytes, "Oodle");
+        dbBytes = Ar.ReadArray<byte>();
+
         // The bytes store whole FString property including length
         // Extract the length and skip it in returning bytes
-        //var size = BitConverter.ToInt32(dbBytes);
-        //dbBytes = dbBytes[4..];
+        var size = BitConverter.ToInt32(dbBytes);
+        dbBytes = dbBytes[4..];
 
         // Validate the size since we have that information
-        //if (size != dbBytes.Length) return Results.UnprocessableEntity("Corrupted file");
+        if (size != dbBytes.Length) return Results.UnprocessableEntity("Corrupted file");
     }
 
     // Return uncompressed

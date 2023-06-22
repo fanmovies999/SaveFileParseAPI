@@ -1,22 +1,23 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
-WORKDIR /App
+# escape=`
+ARG TAG=ltsc2022
+FROM mcr.microsoft.com/dotnet/sdk:7.0-nanoserver-$TAG AS build
+WORKDIR /source
 
-# Copy everything
-COPY . ./
-# Restore as distinct layers
+# copy everything
+COPY . .
 RUN dotnet restore
-# Build and publish a release
-RUN dotnet publish -c Release -o out
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
-WORKDIR /App
-COPY --from=build-env /App/out .
-# don't forget dll
-COPY --from=build-env /App/Klukule.HogwartsLegacy.SavefileParser/oo2core_9_win64.dll .
+RUN dotnet publish -c Release -o /app
 
-ENV PATH=$PATH:/App
+# final stage/image
+#FROM mcr.microsoft.com/dotnet/runtime:7.0-nanoserver-$TAG
+FROM mcr.microsoft.com/dotnet/runtime:7.0-nanoserver-$TAG
+WORKDIR /app
+COPY --from=build /app .
+
+# copy dll
+COPY --from=build /source/Klukule.HogwartsLegacy.SavefileParser/oo2core_9_win64.dll .
 
 EXPOSE 80/tcp
 
-ENTRYPOINT ["dotnet", "Klukule.HogwartsLegacy.SavefileParser.dll"]
+ENTRYPOINT ["Klukule.HogwartsLegacy.SavefileParser.exe"]
