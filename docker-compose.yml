@@ -1,0 +1,12 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  klukulehogwartslegacysavefileparser:
+    image: klukulehogwartslegacysavefileparser
+    build:
+      context: .
+      dockerfile: Klukule.HogwartsLegacy.SavefileParser/Dockerfile
+    ports:
+      - 5212:5212
