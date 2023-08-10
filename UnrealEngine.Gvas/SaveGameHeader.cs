@@ -15,26 +15,26 @@ public class SaveGameHeader
     public string? SaveGameClassName { get; set; }
     public long Unknown1 { get; set; }
 
-    public static SaveGameHeader ReadFrom(BinaryReader reader)
-    {
-        var magic = reader.ReadChars(4);
-        if (!magic.SequenceEqual(FileTypeTag))
-            throw new SaveGameException("Invalid magic number in file header, expected: 'GVAS'.");
+    // public static SaveGameHeader ReadFrom(BinaryReader reader)
+    // {
+    //     var magic = reader.ReadChars(4);
+    //     if (!magic.SequenceEqual(FileTypeTag))
+    //         throw new SaveGameException("Invalid magic number in file header, expected: 'GVAS'.");
 
-        var header = new SaveGameHeader
-        {
-            SaveGameFileVersion = reader.ReadInt32(),
-            PackageFileUE4Version = reader.ReadInt32(),
-            SavedEngineVersion = EngineVersion.ReadFrom(reader),
-            CustomVersionFormat = (CustomVersionSerializationFormat) reader.ReadInt32(),
-            CustomVersions = Enumerable.Range(0, reader.ReadInt32()).Select(_ => CustomVersion.ReadFrom(reader)).ToList(),
-            SaveGameClassName = reader.ReadFString(),
-            Unknown1 = 0
-        };
-        if (header.SaveGameFileVersion >= 3)
-            header.Unknown1 = reader.ReadInt64();
-        return header;
-    }
+    //     var header = new SaveGameHeader
+    //     {
+    //         SaveGameFileVersion = reader.ReadInt32(),
+    //         PackageFileUE4Version = reader.ReadInt32(),
+    //         SavedEngineVersion = EngineVersion.ReadFrom(reader),
+    //         CustomVersionFormat = (CustomVersionSerializationFormat) reader.ReadInt32(),
+    //         CustomVersions = Enumerable.Range(0, reader.ReadInt32()).Select(_ => CustomVersion.ReadFrom(reader)).ToList(),
+    //         SaveGameClassName = reader.ReadFString(),
+    //         Unknown1 = 0
+    //     };
+    //     if (header.SaveGameFileVersion >= 3)
+    //         header.Unknown1 = reader.ReadInt64();
+    //     return header;
+    // }
 
     public void WriteTo(BinaryWriter writer)
     {
@@ -50,4 +50,27 @@ public class SaveGameHeader
         if (SaveGameFileVersion >= 3)
             writer.Write(Unknown1);
     }
+
+    public SaveGameHeader()
+    {        
+    }
+
+    public SaveGameHeader(BinaryReader reader)
+    {
+        var magic = reader.ReadChars(4);
+        if (!magic.SequenceEqual(FileTypeTag))
+            throw new SaveGameException("Invalid magic number in file header, expected: 'GVAS'.");
+
+        SaveGameFileVersion = reader.ReadInt32();
+        PackageFileUE4Version = reader.ReadInt32();
+        SavedEngineVersion = EngineVersion.ReadFrom(reader);
+        CustomVersionFormat = (CustomVersionSerializationFormat) reader.ReadInt32();
+        CustomVersions = Enumerable.Range(0, reader.ReadInt32()).Select(_ => CustomVersion.ReadFrom(reader)).ToList();
+        SaveGameClassName = reader.ReadFString();
+        Unknown1 = 0;
+
+        if (SaveGameFileVersion >= 3)
+            Unknown1 = reader.ReadInt64();
+    }
+
 }

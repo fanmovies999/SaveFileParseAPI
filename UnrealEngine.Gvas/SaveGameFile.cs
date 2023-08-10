@@ -8,40 +8,40 @@ public class SaveGameFile
     public SaveGameHeader? Header { get; set; }
     public FStructProperty? Root { get; set; }
 
-    public static SaveGameFile LoadFrom(Stream stream)
-    {
-        var reader = new DebugBinaryReader(stream);
+    // public static SaveGameFile LoadFrom(Stream stream)
+    // {
+    //     var reader = new DebugBinaryReader(stream);
 
-        var saveGameFile = new SaveGameFile();
-        saveGameFile.Header = SaveGameHeader.ReadFrom(reader);
+    //     var saveGameFile = new SaveGameFile();
+    //     saveGameFile.Header = SaveGameHeader.ReadFrom(reader);
 
-        var root = new FStructProperty();
-        FProperty property;
-        while ((property = FProperty.ReadFrom(reader).First()) != FProperty.NoneProperty)
-            root.Fields.Add(property.Name!, property);
-        saveGameFile.Root = root;
+    //     var root = new FStructProperty();
+    //     FProperty property;
+    //     while ((property = FProperty.ReadFrom(reader).First()) != FProperty.NoneProperty)
+    //         root.Fields.Add(property.Name!, property);
+    //     saveGameFile.Root = root;
 
-        return saveGameFile;
-    }
+    //     return saveGameFile;
+    // }
 
-    public static SaveGameFile LoadFrom(string path)
-    {
-        var fileStream = File.OpenRead(path);
-        var reader = new DebugBinaryReader(fileStream);
+    // public static SaveGameFile LoadFrom(string path)
+    // {
+    //     var fileStream = File.OpenRead(path);
+    //     var reader = new DebugBinaryReader(fileStream);
 
-        var saveGameFile = new SaveGameFile();
-        saveGameFile.Header = SaveGameHeader.ReadFrom(reader);
+    //     var saveGameFile = new SaveGameFile();
+    //     saveGameFile.Header = SaveGameHeader.ReadFrom(reader);
 
-        var root = new FStructProperty();
-        FProperty property;
-        while ((property = FProperty.ReadFrom(reader).First()) != FProperty.NoneProperty)
-            root.Fields.Add(property.Name!, property);
-        saveGameFile.Root = root;
+    //     var root = new FStructProperty();
+    //     FProperty property;
+    //     while ((property = FProperty.ReadFrom(reader).First()) != FProperty.NoneProperty)
+    //         root.Fields.Add(property.Name!, property);
+    //     saveGameFile.Root = root;
         
-        fileStream.Close();
+    //     fileStream.Close();
 
-        return saveGameFile;
-    }
+    //     return saveGameFile;
+    // }
 
     public void Save(string path)
     {
@@ -74,4 +74,31 @@ public class SaveGameFile
             element.Add(property.Value.SerializeProperty());
         return element;
     }
+
+    SaveGameFile(){
+        Header = new SaveGameHeader();
+        Root = new FStructProperty();
+    } 
+
+   ~SaveGameFile() 
+    {
+        Header = null;
+
+        Root!.Fields.Clear();
+        Root = null;
+    }
+
+    public SaveGameFile(Stream stream) {
+        Root = new FStructProperty();
+
+        using (var reader = new BinaryReader(stream)){
+            Header = new SaveGameHeader(reader);
+
+            FProperty property;
+            while ((property = FProperty.ReadFrom(reader).First()) != FProperty.NoneProperty)
+                Root.Fields.Add(property.Name!, property);
+
+        } 
+    } 
+
 }
