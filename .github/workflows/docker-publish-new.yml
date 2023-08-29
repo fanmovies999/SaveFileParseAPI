@@ -8,6 +8,7 @@ name: Docker Image CI linux
 on:
   push:
     branches: [ "master" ]
+    tags: ["v*.*.*"]
   pull_request:
     branches: [ "master" ]
 
@@ -63,7 +64,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}  
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=tag
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
