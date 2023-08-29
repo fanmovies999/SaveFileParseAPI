@@ -22,3 +22,15 @@ For simplicity, the app uses few third-party libraries:
 
 ## Run
 curl --location 'http://localhost:5212/api/v1/RawDatabaseImage' --data-binary "@../savegame/HL-01-00.sav" -X POST
+
+
+## Debug with lldb
+Install lldb
+Get the source, build it (with make or vscode)
+
+```
+cd ~ /dev/SaveFileParseAPI/Klukule.HogwartsLegacy.SavefileParser/bin/Debug/net7.0/
+lldb -- Klukule.HogwartsLegacy.SavefileParser
+run
+```
+Execute curl command in other console (check the port)

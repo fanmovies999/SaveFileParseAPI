@@ -472,7 +472,7 @@ namespace CUE4Parse.UE4.Readers
                 try
                 {
                     Decompress(compressedBuffer, 0, (int) chunk.CompressedSize, dest, destPos, (int) chunk.UncompressedSize, compressionFormat);
-                    Console.WriteLine(chunk.CompressedSize+" "+chunk.UncompressedSize);
+                    //Console.WriteLine(chunk.CompressedSize+" "+chunk.UncompressedSize);
                 }
                 catch (Exception e)
                 {
