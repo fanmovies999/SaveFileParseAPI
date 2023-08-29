@@ -68,7 +68,7 @@ namespace CUE4Parse.Compression
             fixed (byte* compressedPtr = compressed, uncompressedPtr = uncompressed)
             {
                 decodedSize = OodleLZ_Decompress(compressedPtr + compressedOffset, compressedSize,
-                                             uncompressedPtr + uncompressedOffset, uncompressedSize, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+                                             uncompressedPtr + uncompressedOffset, uncompressedSize, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3);
             }
 
             if (decodedSize <= 0)

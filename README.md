@@ -20,3 +20,5 @@ For simplicity, the app uses few third-party libraries:
 - [UnrealEngine.Gvas](https://github.com/SparkyTD/UnrealEngine.Gvas)
 - [CUE4Parse](https://github.com/FabianFG/CUE4Parse)
 
+## Run
+curl --location 'http://localhost:5212/api/v1/RawDatabaseImage' --data-binary "@../savegame/HL-01-00.sav" -X POST

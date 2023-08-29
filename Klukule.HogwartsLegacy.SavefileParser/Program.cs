@@ -28,7 +28,7 @@ app.MapPost("/api/v1/RawDatabaseImage", async (Stream body) =>
     // Step 1: Parse GVAS
     tmp.Position = 0;
     var saveData = new SaveGameFile(tmp);
-/*
+
     // Step 2: Extract RawDatabaseImage
     if (!saveData.Root.Fields.ContainsKey("RawDatabaseImage"))
         return Results.UnprocessableEntity("Not a Hogwarts Legacy save file");
@@ -52,10 +52,10 @@ app.MapPost("/api/v1/RawDatabaseImage", async (Stream body) =>
         // Validate the size since we have that information
         if (size != dbBytes.Length) return Results.UnprocessableEntity("Corrupted file");
     }
-*/    
+    
     GC.Collect();
     // Return uncompressed
-    return Results.UnprocessableEntity("test");// File(dbBytes, "application/octet-stream");
+    return Results.File(dbBytes, "application/octet-stream");
 });
 
 
